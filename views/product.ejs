@@ -1,0 +1,104 @@
+<%- include('partials/header') %>
+  <section class="product-detail section">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Inicio</a> / <a href="/<%= producto.categoria %>"><%= producto.categoria.charAt(0).toUpperCase() + producto.categoria.slice(1) %></a> / <span><%= producto.nombre %></span>
+      </div>
+      <div class="product-detail-grid">
+        <div class="product-detail-image">
+          <% var todasLasImagenes = JSON.parse(producto.imagenes || '[]'); %>
+          <% if (todasLasImagenes.length === 0 && producto.imagen) { todasLasImagenes = [producto.imagen]; } %>
+          <% if (todasLasImagenes.length > 0) { %>
+            <div class="product-gallery">
+              <div class="gallery-main">
+                <img id="galleryMainImg" src="<%= todasLasImagenes[0] %>" alt="<%= producto.nombre %>">
+                <% if (producto.en_oferta) { %>
+                  <span class="product-badge sale-badge large">Oferta</span>
+                <% } %>
+              </div>
+              <% if (todasLasImagenes.length > 1) { %>
+                <div class="gallery-thumbs">
+                  <% todasLasImagenes.forEach(function(img, i) { %>
+                    <img src="<%= img %>" alt="Imagen <%= i + 1 %>" class="gallery-thumb <%= i === 0 ? 'active' : '' %>" onclick="document.getElementById('galleryMainImg').src='<%= img %>';document.querySelectorAll('.gallery-thumb').forEach(function(t){t.classList.remove('active')});this.classList.add('active')">
+                  <% }); %>
+                </div>
+              <% } %>
+            </div>
+          <% } else { %>
+            <div class="product-image-placeholder large">
+              <i class="fas fa-shoe-prints"></i>
+            </div>
+            <% if (producto.en_oferta) { %>
+              <span class="product-badge sale-badge large">Oferta</span>
+            <% } %>
+          <% } %>
+        </div>
+        <div class="product-detail-info">
+          <h1><%= producto.nombre %></h1>
+          <p class="product-category-label"><%= producto.categoria.charAt(0).toUpperCase() + producto.categoria.slice(1) %></p>
+          <% if (producto.en_oferta && producto.precio_oferta) { %>
+            <div class="product-detail-price">
+              <span class="price-old">$<%= parseFloat(producto.precio).toFixed(2) %></span>
+              <span class="price-sale">$<%= parseFloat(producto.precio_oferta).toFixed(2) %></span>
+            </div>
+          <% } else { %>
+            <div class="product-detail-price">
+              <span class="price">$<%= parseFloat(producto.precio).toFixed(2) %></span>
+            </div>
+          <% } %>
+          <div class="product-description">
+            <h4>Descripción</h4>
+            <p><%= producto.descripcion || 'No hay descripción disponible para este producto.' %></p>
+          </div>
+          <div class="product-sizes-selector">
+            <h4>Tallas Disponibles</h4>
+            <% var tallas = JSON.parse(producto.tallas || '[]'); %>
+            <div class="sizes-grid">
+              <% var allSizes = ['34','35','36','37','38','39','40']; %>
+              <% allSizes.forEach(function(s) { %>
+                <span class="size-btn <%= tallas.includes(s) ? 'available' : 'unavailable' %>">
+                  <%= s %>
+                </span>
+              <% }); %>
+            </div>
+          </div>
+          <div class="product-actions">
+            <a href="<%= typeof settings !== 'undefined' && settings.whatsapp_url ? settings.whatsapp_url : 'https://wa.me/584241234567' %>?text=Hola!%20Me%20interesa%20el%20producto%20<%= encodeURIComponent(producto.nombre) %>%20de%20Voga%20Shoes" target="_blank" class="btn btn-primary btn-whatsapp">
+              <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <% if (relacionados.length > 0) { %>
+    <section class="section related-section">
+      <div class="container">
+        <h2 class="section-title">También te puede gustar</h2>
+        <div class="products-grid">
+          <% relacionados.forEach(function(p) { %>
+            <% var tallasR = JSON.parse(p.tallas || '[]'); %>
+            <a href="/producto/<%= p.id %>" class="product-card">
+              <div class="product-image">
+                <% if (p.imagen) { %>
+                  <img src="<%= p.imagen %>" alt="<%= p.nombre %>" loading="lazy">
+                <% } else { %>
+                  <div class="product-image-placeholder">
+                    <i class="fas fa-shoe-prints"></i>
+                  </div>
+                <% } %>
+              </div>
+              <div class="product-info">
+                <h3><%= p.nombre %></h3>
+                <div class="product-price">
+                  <span class="price">$<%= parseFloat(p.precio).toFixed(2) %></span>
+                </div>
+              </div>
+            </a>
+          <% }); %>
+        </div>
+      </div>
+    </section>
+  <% } %>
+<%- include('partials/footer') %>

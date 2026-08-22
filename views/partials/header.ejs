@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voga Shoes - Calzado Femenino</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <span class="slogan"><%= typeof settings !== 'undefined' && settings.slogan ? settings.slogan : 'Elegancia que camina contigo' %></span>
+        <div class="header-top-links">
+          <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+          </button>
+          <a href="/politicas">Políticas</a>
+        </div>
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="container">
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="/" class="logo<%= typeof settings !== 'undefined' && settings.logo_tipo === 'imagen' && settings.logo_imagen ? ' logo-img' : '' %>">
+          <% if (typeof settings !== 'undefined' && settings.logo_tipo === 'imagen' && settings.logo_imagen) { %>
+            <img src="<%= settings.logo_imagen %>" alt="Voga Shoes">
+          <% } else { %>
+            <%= typeof settings !== 'undefined' && settings.logo_texto ? settings.logo_texto : 'Voga' %>
+          <% } %>
+        </a>
+        <nav class="nav" id="mainNav">
+          <ul>
+            <li><a href="/flats" class="<%= currentPage === 'flats' ? 'active' : '' %>">Flats</a></li>
+            <li><a href="/plataformas" class="<%= currentPage === 'plataformas' ? 'active' : '' %>">Plataformas</a></li>
+            <li><a href="/bailarinas" class="<%= currentPage === 'bailarinas' ? 'active' : '' %>">Bailarinas</a></li>
+            <li><a href="/tacones" class="<%= currentPage === 'tacones' ? 'active' : '' %>">Tacones</a></li>
+            <li><a href="/sale" class="sale-link <%= currentPage === 'sale' ? 'active' : '' %>">Sale</a></li>
+            <li><a href="/giftcard" class="<%= currentPage === 'giftcard' ? 'active' : '' %>">Gift Card</a></li>
+            <li><a href="/politicas" class="<%= currentPage === 'politicas' ? 'active' : '' %>">Políticas</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="main-content">

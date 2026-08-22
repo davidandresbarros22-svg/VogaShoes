@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+  <section class="page-header">
+    <div class="container">
+      <h1><%= categoria.charAt(0).toUpperCase() + categoria.slice(1) %></h1>
+      <p>Explora nuestra colección de <%= categoria %></p>
+    </div>
+  </section>
+
+  <section class="section catalog-section">
+    <div class="container">
+      <% if (productos.length > 0) { %>
+        <div class="products-grid">
+          <% productos.forEach(function(p) { %>
+            <% var tallas = JSON.parse(p.tallas || '[]'); %>
+            <a href="/producto/<%= p.id %>" class="product-card">
+              <div class="product-image">
+                <% if (p.imagen) { %>
+                  <img src="<%= p.imagen %>" alt="<%= p.nombre %>" loading="lazy">
+                <% } else { %>
+                  <div class="product-image-placeholder">
+                    <i class="fas fa-shoe-prints"></i>
+                  </div>
+                <% } %>
+                <% if (p.en_oferta) { %>
+                  <span class="product-badge sale-badge">Oferta</span>
+                <% } %>
+              </div>
+              <div class="product-info">
+                <h3><%= p.nombre %></h3>
+                <% if (p.en_oferta && p.precio_oferta) { %>
+                  <div class="product-price">
+                    <span class="price-old">$<%= parseFloat(p.precio).toFixed(2) %></span>
+                    <span class="price-sale">$<%= parseFloat(p.precio_oferta).toFixed(2) %></span>
+                  </div>
+                <% } else { %>
+                  <div class="product-price">
+                    <span class="price">$<%= parseFloat(p.precio).toFixed(2) %></span>
+                  </div>
+                <% } %>
+                <div class="product-sizes">
+                  <% tallas.forEach(function(t) { %>
+                    <span class="size-tag"><%= t %></span>
+                  <% }); %>
+                </div>
+              </div>
+            </a>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <h3>No hay productos disponibles</h3>
+          <p>Estamos actualizando nuestra colección. Vuelve pronto.</p>
+          <a href="/" class="btn btn-primary">Volver al inicio</a>
+        </div>
+      <% } %>
+    </div>
+  </section>
+<%- include('partials/footer') %>

@@ -1,0 +1,70 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<%- include('../partials/admin-nav') %>
+  <section class="admin-section">
+    <div class="container">
+      <div class="admin-header-bar">
+        <h1 class="admin-page-title">Productos</h1>
+        <a href="/admin/productos/nuevo" class="btn btn-primary"><i class="fas fa-plus"></i> Nuevo Producto</a>
+      </div>
+      <div class="admin-table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Imagen</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Oferta</th>
+              <th>Tallas</th>
+              <th>Activo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (productos.length > 0) { %>
+              <% productos.forEach(function(p) { %>
+                <% var tallas = JSON.parse(p.tallas || '[]'); %>
+                <tr>
+                  <td>
+                    <% if (p.imagen) { %>
+                      <img src="<%= p.imagen %>" alt="" class="admin-thumb">
+                    <% } else { %>
+                      <div class="admin-thumb-placeholder"><i class="fas fa-shoe-prints"></i></div>
+                    <% } %>
+                  </td>
+                  <td><%= p.nombre %></td>
+                  <td><span class="badge badge-<%= p.categoria %>"><%= p.categoria %></span></td>
+                  <td>$<%= parseFloat(p.precio).toFixed(2) %></td>
+                  <td>
+                    <% if (p.en_oferta) { %>
+                      <span class="badge badge-sale">$<%= parseFloat(p.precio_oferta).toFixed(2) %></span>
+                    <% } else { %>
+                      <span class="badge badge-no">—</span>
+                    <% } %>
+                  </td>
+                  <td><%= tallas.join(', ') %></td>
+                  <td>
+                    <% if (p.activo) { %>
+                      <span class="badge badge-active">Sí</span>
+                    <% } else { %>
+                      <span class="badge badge-inactive">No</span>
+                    <% } %>
+                  </td>
+                  <td class="actions-cell">
+                    <a href="/admin/productos/<%= p.id %>/editar" class="btn btn-sm" title="Editar"><i class="fas fa-edit"></i></a>
+                    <form action="/admin/productos/<%= p.id %>/eliminar" method="POST" class="inline-form" onsubmit="return confirm('¿Eliminar este producto?')">
+                      <button type="submit" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash"></i></button>
+                    </form>
+                  </td>
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr><td colspan="8" class="empty-cell">No hay productos registrados</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+<%- include('../partials/footer') %>

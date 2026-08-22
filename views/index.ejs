@@ -1,0 +1,129 @@
+<%- include('partials/header') %>
+  <section class="hero">
+    <div class="hero-slider" id="heroSlider">
+      <% if (slides && slides.length > 0) { %>
+        <% slides.forEach(function(slide, index) { %>
+          <% var isSlideVideo = slide.imagen && /\.(mp4|webm|mov)$/i.test(slide.imagen); %>
+          <div class="hero-slide <%= index === 0 ? 'active' : '' %>" <% if (!isSlideVideo) { %>style="background-image: url('<%= slide.imagen ? slide.imagen : '/uploads/placeholder.jpg' %>')"<% } %>>
+            <% if (isSlideVideo) { %>
+              <video class="hero-video" src="<%= slide.imagen %>" autoplay muted loop playsinline></video>
+            <% } %>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <% if (slide.titulo) { %><h1><%= slide.titulo %></h1><% } %>
+              <% if (slide.subtitulo) { %><p><%= slide.subtitulo %></p><% } %>
+              <a href="/flats" class="btn btn-primary">Ver Colección</a>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="hero-slide active" style="background-image: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)">
+          <div class="hero-content">
+            <h1>Voga Shoes</h1>
+            <p>Elegancia que camina contigo</p>
+            <a href="/flats" class="btn btn-primary">Ver Colección</a>
+          </div>
+        </div>
+      <% } %>
+      <% if (slides && slides.length > 1) { %>
+        <button class="slider-btn slider-prev" id="sliderPrev"><i class="fas fa-chevron-left"></i></button>
+        <button class="slider-btn slider-next" id="sliderNext"><i class="fas fa-chevron-right"></i></button>
+        <div class="slider-dots" id="sliderDots">
+          <% slides.forEach(function(s, i) { %>
+            <span class="dot <%= i === 0 ? 'active' : '' %>" data-index="<%= i %>"></span>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="section categories-section">
+    <div class="container">
+      <h2 class="section-title">Categorías</h2>
+      <p class="section-subtitle">Encuentra tu estilo perfecto</p>
+      <div class="categories-grid">
+        <a href="/flats" class="category-card">
+          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_flats ? settings.cat_icon_flats : 'fas fa-shoe-prints' %>"></i></div>
+          <h3>Flats</h3>
+          <p>Comodidad y estilo</p>
+        </a>
+        <a href="/plataformas" class="category-card">
+          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_plataformas ? settings.cat_icon_plataformas : 'fas fa-arrow-up' %>"></i></div>
+          <h3>Plataformas</h3>
+          <p>Altura con confort</p>
+        </a>
+        <a href="/bailarinas" class="category-card">
+          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_bailarinas ? settings.cat_icon_bailarinas : 'fas fa-female' %>"></i></div>
+          <h3>Bailarinas</h3>
+          <p>Clásicas y versátiles</p>
+        </a>
+        <a href="/tacones" class="category-card">
+          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_tacones ? settings.cat_icon_tacones : 'fas fa-chevron-circle-up' %>"></i></div>
+          <h3>Tacones</h3>
+          <p>Elegancia suprema</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section featured-section">
+    <div class="container">
+      <h2 class="section-title">Destacados</h2>
+      <p class="section-subtitle">Lo más nuevo en Voga Shoes</p>
+      <div class="products-grid">
+        <% if (destacados.length > 0) { %>
+          <% destacados.forEach(function(p) { %>
+            <% var tallas = JSON.parse(p.tallas || '[]'); %>
+            <a href="/producto/<%= p.id %>" class="product-card">
+              <div class="product-image">
+                <% if (p.imagen) { %>
+                  <img src="<%= p.imagen %>" alt="<%= p.nombre %>" loading="lazy">
+                <% } else { %>
+                  <div class="product-image-placeholder">
+                    <i class="fas fa-shoe-prints"></i>
+                  </div>
+                <% } %>
+                <% if (p.en_oferta) { %>
+                  <span class="product-badge sale-badge">Oferta</span>
+                <% } %>
+              </div>
+              <div class="product-info">
+                <h3><%= p.nombre %></h3>
+                <p class="product-category"><%= p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1) %></p>
+                <% if (p.en_oferta && p.precio_oferta) { %>
+                  <div class="product-price">
+                    <span class="price-old">$<%= parseFloat(p.precio).toFixed(2) %></span>
+                    <span class="price-sale">$<%= parseFloat(p.precio_oferta).toFixed(2) %></span>
+                  </div>
+                <% } else { %>
+                  <div class="product-price">
+                    <span class="price">$<%= parseFloat(p.precio).toFixed(2) %></span>
+                  </div>
+                <% } %>
+                <div class="product-sizes">
+                  <% tallas.forEach(function(t) { %>
+                    <span class="size-tag"><%= t %></span>
+                  <% }); %>
+                </div>
+              </div>
+            </a>
+          <% }); %>
+        <% } else { %>
+          <p class="empty-message">Próximamente nuevos productos</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section banner-section">
+    <div class="container">
+      <div class="banner">
+        <div class="banner-content">
+          <h2>Encuentra tu calzado ideal</h2>
+          <p>Descubre nuestra colección de flats, plataformas, bailarinas y tacones. Tallas de la 34 a la 40.</p>
+          <a href="/flats" class="btn btn-light">Explorar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+<%- include('partials/footer') %>

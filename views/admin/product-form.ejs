@@ -1,0 +1,144 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<%- include('../partials/admin-nav') %>
+  <section class="admin-section">
+    <div class="container">
+      <h1 class="admin-page-title"><%= producto ? 'Editar' : 'Nuevo' %> Producto</h1>
+      <form action="/admin/productos<%= producto ? '/' + producto.id : '' %>" method="POST" enctype="multipart/form-data" class="admin-form">
+        <% if (producto) { %>
+          <input type="hidden" name="mantener_imagen" value="1">
+        <% } %>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nombre">Nombre del producto *</label>
+            <input type="text" id="nombre" name="nombre" value="<%= producto ? producto.nombre : '' %>" required>
+          </div>
+          <div class="form-group">
+            <label for="categoria">Categoría *</label>
+            <select id="categoria" name="categoria" required>
+              <option value="">Seleccionar...</option>
+              <% ['flats', 'plataformas', 'bailarinas', 'tacones'].forEach(function(c) { %>
+                <option value="<%= c %>" <%= producto && producto.categoria === c ? 'selected' : '' %>><%= c.charAt(0).toUpperCase() + c.slice(1) %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" name="descripcion" rows="4"><%= producto ? producto.descripcion : '' %></textarea>
+          </div>
+          <div class="form-group">
+            <label for="precio">Precio ($) *</label>
+            <input type="number" id="precio" name="precio" step="0.01" min="0" value="<%= producto ? producto.precio : '' %>" required>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="en_oferta" value="1" <%= producto && producto.en_oferta ? 'checked' : '' %> onchange="document.getElementById('ofertaFields').style.display=this.checked?'block':'none'">
+              ¿En oferta?
+            </label>
+          </div>
+          <div class="form-group" id="ofertaFields" style="display:<%= producto && producto.en_oferta ? 'block' : 'none' %>">
+            <label for="precio_oferta">Precio de oferta ($)</label>
+            <input type="number" id="precio_oferta" name="precio_oferta" step="0.01" min="0" value="<%= producto && producto.precio_oferta ? producto.precio_oferta : '' %>">
+          </div>
+          <div class="form-group full-width">
+            <label for="imagenes">Imágenes del producto (mínimo 3, máximo 5)</label>
+            <input type="file" id="imagenes" name="imagenes" accept="image/*" multiple <% if (!producto) { %>required<% } %>>
+            <p class="form-help">Selecciona entre 3 y 5 imágenes. La primera será la principal.</p>
+            <% if (producto) { %>
+              <% var imagenesExistentes = JSON.parse(producto.imagenes || '[]'); %>
+              <% if (imagenesExistentes.length > 0) { %>
+                <div class="current-images" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+                  <% imagenesExistentes.forEach(function(img) { %>
+                    <div style="position:relative;">
+                      <img src="<%= img %>" style="width:80px;height:80px;object-fit:cover;border-radius:4px;border:1px solid var(--gray-200);" alt="Imagen existente">
+                    </div>
+                  <% }); %>
+                </div>
+                <p class="form-help">Imágenes actuales. Sube nuevas para reemplazarlas.</p>
+              <% } else if (producto.imagen) { %>
+                <div class="current-image">
+                  <img src="<%= producto.imagen %>" alt="Vista previa">
+                  <span>Imagen actual</span>
+                </div>
+              <% } %>
+            <% } %>
+            <div id="imagePreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
+            <p id="imageCount" style="font-size:0.75rem;color:var(--gray-500);margin-top:4px;"></p>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" name="activo" value="1" <%= !producto || producto.activo ? 'checked' : '' %>>
+              Producto activo
+            </label>
+          </div>
+          <div class="form-group full-width">
+            <label>Tallas disponibles</label>
+            <div class="tallas-grid">
+              <% ['34','35','36','37','38','39','40'].forEach(function(t) { %>
+                <% var tallasActuales = producto ? JSON.parse(producto.tallas || '[]') : []; %>
+                <label class="talla-checkbox">
+                  <input type="checkbox" name="tallas" value="<%= t %>" <%= tallasActuales.includes(t) ? 'checked' : '' %>>
+                  <span><%= t %></span>
+                </label>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><%= producto ? 'Guardar Cambios' : 'Crear Producto' %></button>
+          <a href="/admin/productos" class="btn btn-outline">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+  <script>
+    document.getElementById('en_oferta') && document.getElementById('en_oferta').addEventListener('change', function() {
+      document.getElementById('ofertaFields').style.display = this.checked ? 'block' : 'none';
+    });
+
+    var imagenesInput = document.getElementById('imagenes');
+    var imagePreview = document.getElementById('imagePreview');
+    var imageCount = document.getElementById('imageCount');
+
+    if (imagenesInput) {
+      imagenesInput.addEventListener('change', function() {
+        imagePreview.innerHTML = '';
+        var files = this.files;
+        var isEditing = '<%= typeof producto !== "undefined" && producto ? "1" : "" %>';
+        if (files.length > 0 && files.length < 3) {
+          imageCount.textContent = 'Debes seleccionar al menos 3 imágenes (' + files.length + ' seleccionadas)';
+          imageCount.style.color = 'var(--error)';
+        } else if (files.length > 5) {
+          imageCount.textContent = 'Máximo 5 imágenes (' + files.length + ' seleccionadas)';
+          imageCount.style.color = 'var(--error)';
+        } else if (files.length > 0) {
+          imageCount.textContent = files.length + ' imágenes seleccionadas';
+          imageCount.style.color = 'var(--success)';
+        } else {
+          imageCount.textContent = '';
+        }
+        Array.from(files).forEach(function(file) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            var div = document.createElement('div');
+            div.style.cssText = 'position:relative;';
+            div.innerHTML = '<img src="' + e.target.result + '" style="width:80px;height:80px;object-fit:cover;border-radius:4px;border:1px solid var(--gray-200);">';
+            imagePreview.appendChild(div);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    }
+
+    document.querySelector('.admin-form').addEventListener('submit', function(e) {
+      var files = imagenesInput ? imagenesInput.files : [];
+      var existingImages = document.querySelectorAll('.current-images img').length;
+      var isEditing = '<%= typeof producto !== "undefined" && producto ? "1" : "" %>';
+      if (!isEditing && files.length < 3) {
+        e.preventDefault();
+        alert('Debes seleccionar al menos 3 imágenes para el producto.');
+        return false;
+      }
+    });
+  </script>
+<%- include('../partials/footer') %>

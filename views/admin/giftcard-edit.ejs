@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<%- include('../partials/admin-nav') %>
+  <section class="admin-section">
+    <div class="container">
+      <h1 class="admin-page-title">Configuración Gift Card</h1>
+      <form action="/admin/giftcard" method="POST" class="admin-form">
+        <div class="form-group full-width">
+          <label for="descripcion">Descripción de la Gift Card</label>
+          <textarea id="descripcion" name="descripcion" rows="6"><%= info ? info.descripcion : '' %></textarea>
+          <p class="form-help">Esta descripción se muestra en la página de Gift Card</p>
+        </div>
+        <div class="form-group">
+          <label for="monto_minimo">Monto mínimo ($)</label>
+          <input type="number" id="monto_minimo" name="monto_minimo" step="1" min="1" value="<%= info ? parseFloat(info.monto_minimo).toFixed(0) : '20' %>">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+          <a href="/admin" class="btn btn-outline">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+<%- include('../partials/footer') %>

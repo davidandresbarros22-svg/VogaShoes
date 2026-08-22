@@ -1,0 +1,50 @@
+  </main>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3><%= typeof settings !== 'undefined' && settings.logo_texto ? settings.logo_texto : 'Voga' %></h3>
+          <p>Tu destino para calzado femenino elegante y moderno. Calidad, estilo y comodidad en cada paso.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Categorías</h4>
+          <ul>
+            <li><a href="/flats">Flats</a></li>
+            <li><a href="/plataformas">Plataformas</a></li>
+            <li><a href="/bailarinas">Bailarinas</a></li>
+            <li><a href="/tacones">Tacones</a></li>
+            <li><a href="/sale">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Información</h4>
+          <ul>
+            <li><a href="/politicas">Políticas de Compra</a></li>
+            <li><a href="/politicas">Políticas de Cambio</a></li>
+            <li><a href="/giftcard">Gift Card</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h4>Síguenos</h4>
+          <div class="social-icons">
+            <a href="<%= typeof settings !== 'undefined' && settings.instagram_url ? settings.instagram_url : '#' %>" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="<%= typeof settings !== 'undefined' && settings.whatsapp_url ? settings.whatsapp_url : '#' %>" target="_blank" rel="noopener" class="social-icon" aria-label="WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+          <p class="footer-contact">
+            <i class="fas fa-envelope"></i> <%= typeof settings !== 'undefined' && settings.footer_email ? settings.footer_email : 'info@vogashoes.com' %><br>
+            <i class="fas fa-phone"></i> <%= typeof settings !== 'undefined' && settings.footer_telefono ? settings.footer_telefono : '+58 424-6582763' %>
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; <%= new Date().getFullYear() %> Voga Shoes. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/main.js"></script>
+</body>
+</html>

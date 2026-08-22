@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<%- include('../partials/admin-nav') %>
+  <section class="admin-section">
+    <div class="container">
+      <h1 class="admin-page-title">Editar Políticas</h1>
+      <form action="/admin/politicas" method="POST" class="admin-form">
+        <div class="form-group full-width">
+          <label for="compra">Política de Compra</label>
+          <textarea id="compra" name="compra" rows="12" class="policy-editor"><%= compra %></textarea>
+          <p class="form-help">Puedes usar HTML básico: &lt;h3&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;, &lt;em&gt;</p>
+        </div>
+        <div class="form-group full-width">
+          <label for="cambio">Política de Cambio</label>
+          <textarea id="cambio" name="cambio" rows="12" class="policy-editor"><%= cambio %></textarea>
+          <p class="form-help">Puedes usar HTML básico: &lt;h3&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;, &lt;em&gt;</p>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Políticas</button>
+          <a href="/admin" class="btn btn-outline">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+<%- include('../partials/footer') %>

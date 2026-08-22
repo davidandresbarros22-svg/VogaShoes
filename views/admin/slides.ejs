@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<%- include('../partials/admin-nav') %>
+  <section class="admin-section">
+    <div class="container">
+      <h1 class="admin-page-title">Administrar Sliders</h1>
+      <div class="admin-grid">
+        <div class="admin-card">
+          <h3>Agregar Slide</h3>
+          <form action="/admin/slides" method="POST" enctype="multipart/form-data" class="admin-form">
+            <div class="form-group">
+              <label for="imagen">Imagen o Video del slide *</label>
+              <input type="file" id="imagen" name="imagen" accept="image/*,video/*" required>
+              <p class="form-help">Recomendado: 1920x800px para imágenes. Videos: mp4, webm. Máx 20MB.</p>
+            </div>
+            <div class="form-group">
+              <label for="titulo">Título</label>
+              <input type="text" id="titulo" name="titulo" placeholder="Ej: Nueva Colección">
+            </div>
+            <div class="form-group">
+              <label for="subtitulo">Subtítulo</label>
+              <input type="text" id="subtitulo" name="subtitulo" placeholder="Ej: Descubre los últimos estilos">
+            </div>
+            <div class="form-group">
+              <label for="orden">Orden</label>
+              <input type="number" id="orden" name="orden" value="0" min="0">
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Slide</button>
+          </form>
+        </div>
+        <div class="admin-card">
+          <h3>Slides Actuales</h3>
+          <div class="slides-list">
+            <% if (slides.length > 0) { %>
+              <% slides.forEach(function(s) { %>
+                <div class="slide-item">
+                  <% if (s.imagen) { %>
+                    <% var isVideo = /\.(mp4|webm|mov)$/i.test(s.imagen); %>
+                    <% if (isVideo) { %>
+                      <video src="<%= s.imagen %>" style="width:80px;height:50px;object-fit:cover;border-radius:4px;" muted></video>
+                    <% } else { %>
+                      <img src="<%= s.imagen %>" alt="<%= s.titulo || 'Slide' %>">
+                    <% } %>
+                  <% } %>
+                  <div class="slide-item-info">
+                    <strong><%= s.titulo || 'Sin título' %></strong>
+                    <span><%= s.subtitulo || '' %></span>
+                    <small>Orden: <%= s.orden %></small>
+                  </div>
+                  <form action="/admin/slides/<%= s.id %>/eliminar" method="POST" onsubmit="return confirm('¿Eliminar este slide?')">
+                    <button type="submit" class="btn btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <p class="empty-message">No hay slides. Agrega uno para mostrar en la página principal.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<%- include('../partials/footer') %>

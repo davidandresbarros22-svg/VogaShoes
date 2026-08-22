@@ -1,0 +1,72 @@
+<%- include('partials/header') %>
+  <section class="page-header">
+    <div class="container">
+      <h1>Gift Card</h1>
+      <p>Tarjetas de regalo Voga Shoes</p>
+    </div>
+  </section>
+
+  <section class="section giftcard-section">
+    <div class="container">
+      <div class="giftcard-container">
+        <div class="giftcard-card">
+          <div class="giftcard-visual">
+            <div class="giftcard-front">
+              <div class="giftcard-logo">Voga <span>Shoes</span></div>
+              <div class="giftcard-amount">Gift Card</div>
+              <div class="giftcard-line"></div>
+              <div class="giftcard-text">El regalo perfecto</div>
+            </div>
+          </div>
+          <div class="giftcard-info">
+            <h2>Tarjeta de Regalo</h2>
+            <p class="giftcard-desc"><%= info ? info.descripcion : 'Tarjetas de regalo Vogashoes' %></p>
+            <div class="giftcard-details">
+              <div class="giftcard-detail-item">
+                <i class="fas fa-dollar-sign"></i>
+                <div>
+                  <strong>Monto mínimo</strong>
+                  <span>Desde $<%= info ? parseFloat(info.monto_minimo).toFixed(0) : '20' %> USD</span>
+                </div>
+              </div>
+              <div class="giftcard-detail-item">
+                <i class="fas fa-gift"></i>
+                <div>
+                  <strong>Personalizable</strong>
+                  <span>Elige el monto que deseas regalar</span>
+                </div>
+              </div>
+              <div class="giftcard-detail-item">
+                <i class="fas fa-exchange-alt"></i>
+                <div>
+                  <strong>Canjeable</strong>
+                  <span>Válida para cualquier producto de la tienda</span>
+                </div>
+              </div>
+            </div>
+            <div class="giftcard-amounts">
+              <h4>Montos sugeridos</h4>
+              <div class="amounts-grid">
+                <% var minMonto = info ? parseFloat(info.monto_minimo) : 20; %>
+                <% [minMonto, minMonto*2, minMonto*3, minMonto*5].forEach(function(m) { %>
+                  <span class="amount-badge">$<%= m.toFixed(0) %></span>
+                <% }); %>
+              </div>
+            </div>
+            <div class="giftcard-contact">
+              <p>Para adquirir tu Gift Card contáctanos por:</p>
+              <div class="giftcard-btns">
+                <a href="https://wa.me/584241234567?text=Hola!%20Quiero%20adquirir%20una%20Gift%20Card%20de%20Voga%20Shoes" target="_blank" class="btn btn-primary btn-whatsapp">
+                  <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="https://instagram.com/vogashoes" target="_blank" class="btn btn-outline">
+                  <i class="fab fa-instagram"></i> Instagram
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<%- include('partials/footer') %>

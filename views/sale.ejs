@@ -1,0 +1,54 @@
+<%- include('partials/header') %>
+  <section class="page-header page-header-sale">
+    <div class="container">
+      <h1>Sale</h1>
+      <p>Ofertas especiales en calzado seleccionado</p>
+    </div>
+  </section>
+
+  <section class="section catalog-section">
+    <div class="container">
+      <% if (productos.length > 0) { %>
+        <div class="products-grid">
+          <% productos.forEach(function(p) { %>
+            <% var tallas = JSON.parse(p.tallas || '[]'); %>
+            <a href="/producto/<%= p.id %>" class="product-card">
+              <div class="product-image">
+                <% if (p.imagen) { %>
+                  <img src="<%= p.imagen %>" alt="<%= p.nombre %>" loading="lazy">
+                <% } else { %>
+                  <div class="product-image-placeholder">
+                    <i class="fas fa-shoe-prints"></i>
+                  </div>
+                <% } %>
+                <span class="product-badge sale-badge">Oferta</span>
+              </div>
+              <div class="product-info">
+                <h3><%= p.nombre %></h3>
+                <p class="product-category"><%= p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1) %></p>
+                <% if (p.precio_oferta) { %>
+                  <div class="product-price">
+                    <span class="price-old">$<%= parseFloat(p.precio).toFixed(2) %></span>
+                    <span class="price-sale">$<%= parseFloat(p.precio_oferta).toFixed(2) %></span>
+                  </div>
+                <% } %>
+                <div class="product-sizes">
+                  <% tallas.forEach(function(t) { %>
+                    <span class="size-tag"><%= t %></span>
+                  <% }); %>
+                </div>
+              </div>
+            </a>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <i class="fas fa-tags"></i>
+          <h3>No hay ofertas disponibles</h3>
+          <p>Pronto tendremos nuevas promociones. ¡Mantente atenta!</p>
+          <a href="/" class="btn btn-primary">Volver al inicio</a>
+        </div>
+      <% } %>
+    </div>
+  </section>
+<%- include('partials/footer') %>

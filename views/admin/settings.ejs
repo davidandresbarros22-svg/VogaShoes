@@ -1,0 +1,130 @@
+<%- include('../partials/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<%- include('../partials/admin-nav') %>
+  <section class="admin-section">
+    <div class="container">
+      <h1 class="admin-page-title">Ajustes de Administrador</h1>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+      <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success"><%= success %></div>
+      <% } %>
+      <form action="/admin/ajustes" method="POST" enctype="multipart/form-data" class="admin-form">
+        <h2 style="margin-top:0;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-user"></i> Credenciales</h2>
+        <div class="form-group">
+          <label for="current_password">Contraseña actual *</label>
+          <input type="password" id="current_password" name="current_password" required>
+        </div>
+        <div class="form-group">
+          <label for="new_username">Nuevo nombre de usuario</label>
+          <input type="text" id="new_username" name="new_username" value="<%= admin.username %>">
+        </div>
+        <div class="form-group">
+          <label for="new_password">Nueva contraseña</label>
+          <input type="password" id="new_password" name="new_password" placeholder="Dejar vacío para mantener">
+        </div>
+        <div class="form-group">
+          <label for="confirm_password">Confirmar nueva contraseña</label>
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Repite la nueva contraseña">
+        </div>
+
+        <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-share-alt"></i> Redes Sociales</h2>
+        <div class="form-group">
+          <label for="instagram_url"><i class="fab fa-instagram"></i> URL de Instagram</label>
+          <input type="url" id="instagram_url" name="instagram_url" value="<%= siteSettings.instagram_url %>" placeholder="https://www.instagram.com/tucuenta">
+        </div>
+        <div class="form-group">
+          <label for="whatsapp_url"><i class="fab fa-whatsapp"></i> URL de WhatsApp</label>
+          <input type="url" id="whatsapp_url" name="whatsapp_url" value="<%= siteSettings.whatsapp_url %>" placeholder="https://wa.me/584241234567">
+        </div>
+
+        <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-paint-brush"></i> Logo</h2>
+        <div class="form-group">
+          <label for="logo_tipo">Tipo de logo</label>
+          <select id="logo_tipo" name="logo_tipo" onchange="document.getElementById('logoTextoGroup').style.display=this.value==='texto'?'block':'none';document.getElementById('logoImagenGroup').style.display=this.value==='imagen'?'block':'none'">
+            <option value="texto" <%= siteSettings.logo_tipo === 'imagen' ? '' : 'selected' %>>Texto</option>
+            <option value="imagen" <%= siteSettings.logo_tipo === 'imagen' ? 'selected' : '' %>>Imagen</option>
+          </select>
+        </div>
+        <div class="form-group" id="logoTextoGroup" style="<%= siteSettings.logo_tipo === 'imagen' ? 'display:none' : '' %>">
+          <label for="logo_texto">Texto del logo</label>
+          <input type="text" id="logo_texto" name="logo_texto" value="<%= siteSettings.logo_texto %>">
+        </div>
+        <div class="form-group" id="logoImagenGroup" style="<%= siteSettings.logo_tipo === 'imagen' ? '' : 'display:none' %>">
+          <label for="logo_imagen">Imagen del logo</label>
+          <input type="file" id="logo_imagen" name="logo_imagen" accept="image/*">
+          <% if (siteSettings.logo_tipo === 'imagen' && siteSettings.logo_imagen) { %>
+            <div style="margin-top:8px;padding:8px;background:var(--off-white);border-radius:6px;">
+              <img src="<%= siteSettings.logo_imagen %>" style="max-height:40px;width:auto;" alt="Logo actual">
+              <p style="font-size:0.75rem;color:var(--gray-500);margin-top:4px;">Logo actual. Sube uno nuevo para reemplazarlo.</p>
+            </div>
+          <% } %>
+        </div>
+
+        <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-tag"></i> Encabezado</h2>
+        <div class="form-group">
+          <label for="slogan">Slogan (barra superior)</label>
+          <input type="text" id="slogan" name="slogan" value="<%= siteSettings.slogan || '' %>" placeholder="Ej: Elegancia que camina contigo">
+          <p class="form-help">Texto que aparece en la barra superior del sitio</p>
+        </div>
+
+        <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-envelope"></i> Contacto (Footer)</h2>
+        <div class="form-group">
+          <label for="footer_email"><i class="fas fa-envelope"></i> Email de contacto</label>
+          <input type="email" id="footer_email" name="footer_email" value="<%= siteSettings.footer_email || '' %>" placeholder="info@vogashoes.com">
+        </div>
+        <div class="form-group">
+          <label for="footer_telefono"><i class="fas fa-phone"></i> Teléfono de contacto</label>
+          <input type="text" id="footer_telefono" name="footer_telefono" value="<%= siteSettings.footer_telefono || '' %>" placeholder="+58 424-6582763">
+        </div>
+
+        <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-th-large"></i> Iconos de Categorías</h2>
+        <p style="font-size:0.8rem;color:var(--gray-500);margin-bottom:1rem;">Selecciona el icono de Font Awesome para cada categoría</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="cat_icon_flats"><i class="fas fa-shoe-prints"></i> Flats</label>
+            <select id="cat_icon_flats" name="cat_icon_flats">
+              <% var iconOptions = ['fas fa-shoe-prints','fas fa-heart','fas fa-star','fas fa-gem','fas fa-feather','fas fa-leaf','fas fa-paw','fas fa-female']; %>
+              <% iconOptions.forEach(function(icon) { %>
+                <option value="<%= icon %>" <%= siteSettings.cat_icon_flats === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cat_icon_plataformas"><i class="fas fa-arrow-up"></i> Plataformas</label>
+            <select id="cat_icon_plataformas" name="cat_icon_plataformas">
+              <% var iconOptions2 = ['fas fa-arrow-up','fas fa-level-up-alt','fas fa-sort-amount-up','fas fa-chevron-up','fas fa-long-arrow-alt-up','fas fa-arrow-alt-circle-up']; %>
+              <% iconOptions2.forEach(function(icon) { %>
+                <option value="<%= icon %>" <%= siteSettings.cat_icon_plataformas === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cat_icon_bailarinas"><i class="fas fa-female"></i> Bailarinas</label>
+            <select id="cat_icon_bailarinas" name="cat_icon_bailarinas">
+              <% var iconOptions3 = ['fas fa-female','fas fa-venus','fas fa-star','fas fa-heart','fas fa-music','fas fa-ribbon','fas fa-leaf']; %>
+              <% iconOptions3.forEach(function(icon) { %>
+                <option value="<%= icon %>" <%= siteSettings.cat_icon_bailarinas === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cat_icon_tacones"><i class="fas fa-chevron-circle-up"></i> Tacones</label>
+            <select id="cat_icon_tacones" name="cat_icon_tacones">
+              <% var iconOptions4 = ['fas fa-chevron-circle-up','fas fa-sort-amount-up','fas fa-angle-double-up','fas fa-caret-up','fas fa-gem','fas fa-crown']; %>
+              <% iconOptions4.forEach(function(icon) { %>
+                <option value="<%= icon %>" <%= siteSettings.cat_icon_tacones === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions" style="margin-top:1.5rem;">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+          <a href="/admin" class="btn btn-outline">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </section>
+<%- include('../partials/footer') %>

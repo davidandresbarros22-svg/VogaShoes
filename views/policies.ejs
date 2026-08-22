@@ -1,0 +1,41 @@
+<%- include('partials/header') %>
+  <section class="page-header">
+    <div class="container">
+      <h1>Políticas</h1>
+      <p>Políticas de compra y cambio</p>
+    </div>
+  </section>
+
+  <section class="section policies-section">
+    <div class="container">
+      <div class="policies-grid">
+        <div class="policy-card">
+          <div class="policy-header">
+            <i class="fas fa-shopping-bag"></i>
+            <h2>Política de Compra</h2>
+          </div>
+          <div class="policy-content">
+            <% if (compra) { %>
+              <%- compra %>
+            <% } else { %>
+              <p>No hay información disponible. El administrador agregará esta información próximamente.</p>
+            <% } %>
+          </div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-header">
+            <i class="fas fa-exchange-alt"></i>
+            <h2>Política de Cambio</h2>
+          </div>
+          <div class="policy-content">
+            <% if (cambio) { %>
+              <%- cambio %>
+            <% } else { %>
+              <p>No hay información disponible. El administrador agregará esta información próximamente.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<%- include('partials/footer') %>
