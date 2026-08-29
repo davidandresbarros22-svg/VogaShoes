@@ -56,10 +56,10 @@
             <div class="giftcard-contact">
               <p>Para adquirir tu Gift Card contáctanos por:</p>
               <div class="giftcard-btns">
-                <a href="https://wa.me/584241234567?text=Hola!%20Quiero%20adquirir%20una%20Gift%20Card%20de%20Voga%20Shoes" target="_blank" class="btn btn-primary btn-whatsapp">
+                <a href="<%= typeof settings !== 'undefined' && settings.whatsapp_url ? settings.whatsapp_url : 'https://wa.me/584246582763' %>?text=Hola!%20Quiero%20adquirir%20una%20Gift%20Card%20de%20Voga%20Shoes" target="_blank" class="btn btn-primary btn-whatsapp">
                   <i class="fab fa-whatsapp"></i> WhatsApp
                 </a>
-                <a href="https://instagram.com/vogashoes" target="_blank" class="btn btn-outline">
+                <a href="<%= typeof settings !== 'undefined' && settings.instagram_url ? settings.instagram_url : '#' %>" target="_blank" class="btn btn-outline">
                   <i class="fab fa-instagram"></i> Instagram
                 </a>
               </div>

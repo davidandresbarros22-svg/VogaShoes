@@ -1,23 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Dark Mode Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  const html = document.documentElement;
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') html.setAttribute('data-theme', 'dark');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', function() {
-      const isDark = html.getAttribute('data-theme') === 'dark';
-      if (isDark) {
-        html.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    });
-  }
-
   // Mobile Menu Toggle
   const menuToggle = document.getElementById('menuToggle');
   const mainNav = document.getElementById('mainNav');
