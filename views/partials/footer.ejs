@@ -4,7 +4,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <h3><%= typeof settings !== 'undefined' && settings.logo_texto ? settings.logo_texto : 'Voga' %></h3>
-          <p>Tu destino para calzado femenino elegante y moderno. Calidad, estilo y comodidad en cada paso.</p>
+          <p><%= typeof settings !== 'undefined' && settings.footer_descripcion ? settings.footer_descripcion : 'Tu destino para calzado femenino elegante y moderno. Calidad, estilo y comodidad en cada paso.' %></p>
         </div>
         <div class="footer-links">
           <h4>Categorías</h4>
@@ -35,7 +35,7 @@
             </a>
           </div>
           <p class="footer-contact">
-            <i class="fas fa-envelope"></i> <%= typeof settings !== 'undefined' && settings.footer_email ? settings.footer_email : 'info@vogashoes.com' %><br>
+            <i class="fab fa-instagram"></i> <%= typeof settings !== 'undefined' && settings.footer_instagram ? settings.footer_instagram : '@vogashoes' %><br>
             <i class="fas fa-phone"></i> <%= typeof settings !== 'undefined' && settings.footer_telefono ? settings.footer_telefono : '+58 424-6582763' %>
           </p>
         </div>

@@ -50,6 +50,11 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     descripcion TEXT DEFAULT '',
     monto_minimo REAL DEFAULT 20,
+    titulo TEXT DEFAULT 'Tarjeta de Regalo',
+    imagen TEXT DEFAULT '',
+    visual_logo TEXT DEFAULT 'Voga Shoes',
+    visual_titulo TEXT DEFAULT 'Gift Card',
+    visual_subtitulo TEXT DEFAULT 'El regalo perfecto',
     updated_at TEXT DEFAULT (datetime('now','localtime'))
   );
 
@@ -62,6 +67,12 @@ db.exec(`
 try {
   db.exec(`ALTER TABLE products ADD COLUMN imagenes TEXT DEFAULT '[]'`);
 } catch (e) {}
+
+try { db.exec(`ALTER TABLE giftcard_info ADD COLUMN titulo TEXT DEFAULT 'Tarjeta de Regalo'`); } catch (e) {}
+try { db.exec(`ALTER TABLE giftcard_info ADD COLUMN imagen TEXT DEFAULT ''`); } catch (e) {}
+try { db.exec(`ALTER TABLE giftcard_info ADD COLUMN visual_logo TEXT DEFAULT 'Voga Shoes'`); } catch (e) {}
+try { db.exec(`ALTER TABLE giftcard_info ADD COLUMN visual_titulo TEXT DEFAULT 'Gift Card'`); } catch (e) {}
+try { db.exec(`ALTER TABLE giftcard_info ADD COLUMN visual_subtitulo TEXT DEFAULT 'El regalo perfecto'`); } catch (e) {}
 
 const initAdmin = db.prepare('SELECT id FROM admin LIMIT 1').get();
 if (!initAdmin) {
@@ -93,8 +104,9 @@ const defaults = [
   ['logo_texto', 'Voga Shoes'],
   ['logo_imagen', ''],
   ['slogan', 'Elegancia que camina contigo'],
-  ['footer_email', 'info@vogashoes.com'],
+  ['footer_instagram', '@vogashoes'],
   ['footer_telefono', '+58 424-6582763'],
+  ['footer_descripcion', 'Tu destino para calzado femenino elegante y moderno. Calidad, estilo y comodidad en cada paso.'],
   ['cat_icon_flats', 'fas fa-shoe-prints'],
   ['cat_icon_plataformas', 'fas fa-arrow-up'],
   ['cat_icon_bailarinas', 'fas fa-female'],

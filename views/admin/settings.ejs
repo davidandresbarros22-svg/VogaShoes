@@ -71,12 +71,17 @@
 
         <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-envelope"></i> Contacto (Footer)</h2>
         <div class="form-group">
-          <label for="footer_email"><i class="fas fa-envelope"></i> Email de contacto</label>
-          <input type="email" id="footer_email" name="footer_email" value="<%= siteSettings.footer_email || '' %>" placeholder="info@vogashoes.com">
+          <label for="footer_instagram"><i class="fab fa-instagram"></i> Instagram (handle)</label>
+          <input type="text" id="footer_instagram" name="footer_instagram" value="<%= siteSettings.footer_instagram || '' %>" placeholder="@vogashoes">
         </div>
         <div class="form-group">
           <label for="footer_telefono"><i class="fas fa-phone"></i> Teléfono de contacto</label>
           <input type="text" id="footer_telefono" name="footer_telefono" value="<%= siteSettings.footer_telefono || '' %>" placeholder="+58 424-6582763">
+        </div>
+        <div class="form-group full-width">
+          <label for="footer_descripcion"><i class="fas fa-align-left"></i> Descripción del footer</label>
+          <textarea id="footer_descripcion" name="footer_descripcion" rows="3"><%= siteSettings.footer_descripcion || '' %></textarea>
+          <p class="form-help">Texto que aparece debajo de la marca en el footer</p>
         </div>
 
         <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-th-large"></i> Iconos de Categorías</h2>

@@ -11,15 +11,19 @@
       <div class="giftcard-container">
         <div class="giftcard-card">
           <div class="giftcard-visual">
-            <div class="giftcard-front">
-              <div class="giftcard-logo">Voga <span>Shoes</span></div>
-              <div class="giftcard-amount">Gift Card</div>
-              <div class="giftcard-line"></div>
-              <div class="giftcard-text">El regalo perfecto</div>
-            </div>
+            <% if (info && info.imagen) { %>
+              <img src="<%= info.imagen %>" alt="Gift Card" style="width:100%;height:100%;object-fit:cover;">
+            <% } else { %>
+              <div class="giftcard-front">
+                <div class="giftcard-logo"><%= info && info.visual_logo ? info.visual_logo : 'Voga Shoes' %></div>
+                <div class="giftcard-amount"><%= info && info.visual_titulo ? info.visual_titulo : 'Gift Card' %></div>
+                <div class="giftcard-line"></div>
+                <div class="giftcard-text"><%= info && info.visual_subtitulo ? info.visual_subtitulo : 'El regalo perfecto' %></div>
+              </div>
+            <% } %>
           </div>
           <div class="giftcard-info">
-            <h2>Tarjeta de Regalo</h2>
+            <h2><%= info && info.titulo ? info.titulo : 'Tarjeta de Regalo' %></h2>
             <p class="giftcard-desc"><%= info ? info.descripcion : 'Tarjetas de regalo Vogashoes' %></p>
             <div class="giftcard-details">
               <div class="giftcard-detail-item">

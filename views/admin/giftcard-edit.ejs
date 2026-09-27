@@ -4,16 +4,55 @@
   <section class="admin-section">
     <div class="container">
       <h1 class="admin-page-title">Configuración Gift Card</h1>
-      <form action="/admin/giftcard" method="POST" class="admin-form">
+      <form action="/admin/giftcard" method="POST" enctype="multipart/form-data" class="admin-form">
+        <h2 style="margin-top:0;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-image"></i> Diseño Visual</h2>
+
+        <div class="form-group full-width">
+          <label for="imagen">Imagen de la Gift Card</label>
+          <input type="file" id="imagen" name="imagen" accept="image/*">
+          <p class="form-help">Si subes una imagen, reemplaza el diseño visual de la tarjeta</p>
+          <% if (info && info.imagen) { %>
+            <div style="margin-top:10px;">
+              <img src="<%= info.imagen %>" style="max-width:300px;border-radius:8px;border:1px solid var(--gray-200);" alt="Gift Card actual">
+              <p class="form-help">Imagen actual. Sube una nueva para reemplazarla.</p>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="visual_logo">Logo (texto)</label>
+            <input type="text" id="visual_logo" name="visual_logo" value="<%= info ? info.visual_logo : 'Voga Shoes' %>">
+          </div>
+          <div class="form-group">
+            <label for="visual_titulo">Título grande</label>
+            <input type="text" id="visual_titulo" name="visual_titulo" value="<%= info ? info.visual_titulo : 'Gift Card' %>">
+          </div>
+          <div class="form-group full-width">
+            <label for="visual_subtitulo">Subtítulo</label>
+            <input type="text" id="visual_subtitulo" name="visual_subtitulo" value="<%= info ? info.visual_subtitulo : 'El regalo perfecto' %>">
+          </div>
+        </div>
+
+        <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-edit"></i> Contenido</h2>
+
+        <div class="form-group full-width">
+          <label for="titulo">Título de la sección</label>
+          <input type="text" id="titulo" name="titulo" value="<%= info && info.titulo ? info.titulo : 'Tarjeta de Regalo' %>">
+          <p class="form-help">Título que aparece en el lado derecho de la tarjeta</p>
+        </div>
+
         <div class="form-group full-width">
           <label for="descripcion">Descripción de la Gift Card</label>
-          <textarea id="descripcion" name="descripcion" rows="6"><%= info ? info.descripcion : '' %></textarea>
+          <textarea id="descripcion" name="descripcion" rows="4"><%= info ? info.descripcion : '' %></textarea>
           <p class="form-help">Esta descripción se muestra en la página de Gift Card</p>
         </div>
+
         <div class="form-group">
           <label for="monto_minimo">Monto mínimo ($)</label>
           <input type="number" id="monto_minimo" name="monto_minimo" step="1" min="1" value="<%= info ? parseFloat(info.monto_minimo).toFixed(0) : '20' %>">
         </div>
+
         <div class="form-actions">
           <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
           <a href="/admin" class="btn btn-outline">Cancelar</a>

@@ -151,10 +151,22 @@ router.get('/giftcard', (req, res) => {
   res.render('admin/giftcard-edit', { info, admin: req.session.adminUsername });
 });
 
-router.post('/giftcard', (req, res) => {
-  const { descripcion, monto_minimo } = req.body;
-  const id = db.prepare('SELECT id FROM giftcard_info LIMIT 1').get().id;
-  db.prepare('UPDATE giftcard_info SET descripcion = ?, monto_minimo = ?, updated_at = datetime(\'now\',\'localtime\') WHERE id = ?').run(descripcion || '', parseFloat(monto_minimo) || 20, id);
+router.post('/giftcard', upload.single('imagen'), (req, res) => {
+  const { descripcion, monto_minimo, titulo, visual_logo, visual_titulo, visual_subtitulo } = req.body;
+  const existing = db.prepare('SELECT id, imagen FROM giftcard_info LIMIT 1').get();
+  const id = existing.id;
+  let imagen = existing.imagen || '';
+  if (req.file) {
+    if (imagen) {
+      const oldPath = path.join(__dirname, '..', 'public', imagen);
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+    }
+    imagen = '/uploads/' + req.file.filename;
+  }
+  db.prepare(`UPDATE giftcard_info SET descripcion=?, monto_minimo=?, titulo=?, imagen=?, visual_logo=?, visual_titulo=?, visual_subtitulo=?, updated_at=datetime('now','localtime') WHERE id=?`).run(
+    descripcion || '', parseFloat(monto_minimo) || 20, titulo || 'Tarjeta de Regalo', imagen,
+    visual_logo || 'Voga Shoes', visual_titulo || 'Gift Card', visual_subtitulo || 'El regalo perfecto', id
+  );
   res.redirect('/admin/giftcard');
 });
 
@@ -167,7 +179,7 @@ router.get('/ajustes', (req, res) => {
 });
 
 router.post('/ajustes', upload.single('logo_imagen'), (req, res) => {
-  const { current_password, new_username, new_password, confirm_password, instagram_url, whatsapp_url, logo_tipo, logo_texto, slogan, footer_email, footer_telefono, cat_icon_flats, cat_icon_plataformas, cat_icon_bailarinas, cat_icon_tacones } = req.body;
+  const { current_password, new_username, new_password, confirm_password, instagram_url, whatsapp_url, logo_tipo, logo_texto, slogan, footer_instagram, footer_telefono, footer_descripcion, cat_icon_flats, cat_icon_plataformas, cat_icon_bailarinas, cat_icon_tacones } = req.body;
   const adminData = db.prepare('SELECT * FROM admin WHERE id = ?').get(req.session.adminId);
   if (!bcrypt.compareSync(current_password, adminData.password)) {
     const admin = db.prepare('SELECT id, username FROM admin WHERE id = ?').get(req.session.adminId);
@@ -209,8 +221,9 @@ router.post('/ajustes', upload.single('logo_imagen'), (req, res) => {
   upsert.run('logo_texto', logo_texto || 'Voga Shoes');
   upsert.run('logo_imagen', logoImagen);
   upsert.run('slogan', slogan || 'Elegancia que camina contigo');
-  upsert.run('footer_email', footer_email || '');
+  upsert.run('footer_instagram', footer_instagram || '@vogashoes');
   upsert.run('footer_telefono', footer_telefono || '');
+  upsert.run('footer_descripcion', footer_descripcion || 'Tu destino para calzado femenino elegante y moderno. Calidad, estilo y comodidad en cada paso.');
   upsert.run('cat_icon_flats', cat_icon_flats || 'fas fa-shoe-prints');
   upsert.run('cat_icon_plataformas', cat_icon_plataformas || 'fas fa-arrow-up');
   upsert.run('cat_icon_bailarinas', cat_icon_bailarinas || 'fas fa-female');
