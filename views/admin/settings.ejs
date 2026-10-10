@@ -85,45 +85,42 @@
         </div>
 
         <h2 style="margin-top:2rem;color:var(--gold);font-size:1.1rem;border-bottom:1px solid var(--border-color);padding-bottom:0.5rem;margin-bottom:1rem;"><i class="fas fa-th-large"></i> Iconos de Categorías</h2>
-        <p style="font-size:0.8rem;color:var(--gray-500);margin-bottom:1rem;">Selecciona el icono de Font Awesome para cada categoría</p>
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="cat_icon_flats"><i class="fas fa-shoe-prints"></i> Flats</label>
-            <select id="cat_icon_flats" name="cat_icon_flats">
-              <% var iconOptions = ['fas fa-shoe-prints','fas fa-heart','fas fa-star','fas fa-gem','fas fa-feather','fas fa-leaf','fas fa-paw','fas fa-female']; %>
-              <% iconOptions.forEach(function(icon) { %>
-                <option value="<%= icon %>" <%= siteSettings.cat_icon_flats === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
-              <% }); %>
-            </select>
+        <p style="font-size:0.8rem;color:var(--gray-500);margin-bottom:1rem;">Sube una imagen personalizada o elige un icono de Font Awesome para cada categoría</p>
+
+        <% var categorias = ['flats', 'plataformas', 'bailarinas', 'tacones']; %>
+        <% var faIcons = ['fas fa-shoe-prints','fas fa-heart','fas fa-star','fas fa-gem','fas fa-feather','fas fa-leaf','fas fa-paw','fas fa-female','fas fa-venus','fas fa-crown','fas fa-magic','fas fa-spa','fas fa-dove','fas fa-butterfly','fas fa-fire','fas fa-moon','fas fa-sun','fas fa-cloud','fas fa-anchor','fas fa-bolt','fas fa-diamond','fas fa-ring','fas fa-certificate','fas fa-award']; %>
+
+        <% categorias.forEach(function(cat) { %>
+          <% var currentVal = siteSettings['cat_icon_' + cat] || ''; %>
+          <% var isImage = currentVal.indexOf('/') === 0; %>
+          <div style="background:var(--gray-100);padding:16px;border-radius:8px;margin-bottom:12px;">
+            <strong style="text-transform:capitalize;display:block;margin-bottom:10px;color:var(--gold);"><%= cat %></strong>
+
+            <% if (isImage) { %>
+              <div style="margin-bottom:10px;">
+                <img src="<%= currentVal %>" style="width:50px;height:50px;object-fit:cover;border-radius:8px;border:2px solid var(--gold);" alt="<%= cat %>">
+                <span style="font-size:0.75rem;color:var(--gray-500);margin-left:8px;">Imagen actual</span>
+              </div>
+            <% } %>
+
+            <div class="form-grid" style="gap:12px;">
+              <div class="form-group">
+                <label style="font-size:0.75rem;">Subir imagen</label>
+                <input type="file" name="cat_img_<%= cat %>" accept="image/*">
+              </div>
+              <div class="form-group">
+                <label style="font-size:0.75rem;">O elegir icono</label>
+                <select name="cat_icon_<%= cat %>" onchange="this.closest('div[style]').querySelector('input[type=file]').value=''">
+                  <option value="" <%= !isImage && !currentVal ? 'selected' : '' %>>-- Sin icono --</option>
+                  <% faIcons.forEach(function(icon) { %>
+                    <option value="<%= icon %>" <%= !isImage && currentVal === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+            <p class="form-help" style="margin-top:4px;">Si subes imagen, se usa la imagen. Si no, se usa el icono seleccionado.</p>
           </div>
-          <div class="form-group">
-            <label for="cat_icon_plataformas"><i class="fas fa-arrow-up"></i> Plataformas</label>
-            <select id="cat_icon_plataformas" name="cat_icon_plataformas">
-              <% var iconOptions2 = ['fas fa-arrow-up','fas fa-level-up-alt','fas fa-sort-amount-up','fas fa-chevron-up','fas fa-long-arrow-alt-up','fas fa-arrow-alt-circle-up']; %>
-              <% iconOptions2.forEach(function(icon) { %>
-                <option value="<%= icon %>" <%= siteSettings.cat_icon_plataformas === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
-              <% }); %>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="cat_icon_bailarinas"><i class="fas fa-female"></i> Bailarinas</label>
-            <select id="cat_icon_bailarinas" name="cat_icon_bailarinas">
-              <% var iconOptions3 = ['fas fa-female','fas fa-venus','fas fa-star','fas fa-heart','fas fa-music','fas fa-ribbon','fas fa-leaf']; %>
-              <% iconOptions3.forEach(function(icon) { %>
-                <option value="<%= icon %>" <%= siteSettings.cat_icon_bailarinas === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
-              <% }); %>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="cat_icon_tacones"><i class="fas fa-chevron-circle-up"></i> Tacones</label>
-            <select id="cat_icon_tacones" name="cat_icon_tacones">
-              <% var iconOptions4 = ['fas fa-chevron-circle-up','fas fa-sort-amount-up','fas fa-angle-double-up','fas fa-caret-up','fas fa-gem','fas fa-crown']; %>
-              <% iconOptions4.forEach(function(icon) { %>
-                <option value="<%= icon %>" <%= siteSettings.cat_icon_tacones === icon ? 'selected' : '' %>><%= icon.replace('fas fa-','') %></option>
-              <% }); %>
-            </select>
-          </div>
-        </div>
+        <% }); %>
 
         <div class="form-actions" style="margin-top:1.5rem;">
           <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>

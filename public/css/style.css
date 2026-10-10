@@ -936,6 +936,19 @@ img {
   padding: 40px;
 }
 
+.giftcard-visual-con-imagen {
+  background: var(--off-white);
+  padding: 30px;
+}
+
+.giftcard-visual-con-imagen img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 .giftcard-front {
   text-align: center;
   color: var(--white);

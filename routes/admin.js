@@ -178,7 +178,13 @@ router.get('/ajustes', (req, res) => {
   res.render('admin/settings', { admin, siteSettings, error: null, success: null, adminUser: req.session.adminUsername });
 });
 
-router.post('/ajustes', upload.single('logo_imagen'), (req, res) => {
+router.post('/ajustes', upload.fields([
+  { name: 'logo_imagen', maxCount: 1 },
+  { name: 'cat_img_flats', maxCount: 1 },
+  { name: 'cat_img_plataformas', maxCount: 1 },
+  { name: 'cat_img_bailarinas', maxCount: 1 },
+  { name: 'cat_img_tacones', maxCount: 1 }
+]), (req, res) => {
   const { current_password, new_username, new_password, confirm_password, instagram_url, whatsapp_url, logo_tipo, logo_texto, slogan, footer_instagram, footer_telefono, footer_descripcion, cat_icon_flats, cat_icon_plataformas, cat_icon_bailarinas, cat_icon_tacones } = req.body;
   const adminData = db.prepare('SELECT * FROM admin WHERE id = ?').get(req.session.adminId);
   if (!bcrypt.compareSync(current_password, adminData.password)) {
@@ -206,12 +212,12 @@ router.post('/ajustes', upload.single('logo_imagen'), (req, res) => {
 
   let logoImagen = db.prepare("SELECT valor FROM site_settings WHERE clave = 'logo_imagen'").get();
   logoImagen = logoImagen ? logoImagen.valor : '';
-  if (req.file) {
+  if (req.files && req.files.logo_imagen && req.files.logo_imagen[0]) {
     if (logoImagen) {
       const oldPath = path.join(__dirname, '..', 'public', logoImagen);
       if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
     }
-    logoImagen = '/uploads/' + req.file.filename;
+    logoImagen = '/uploads/' + req.files.logo_imagen[0].filename;
   }
 
   const upsert = db.prepare('INSERT OR REPLACE INTO site_settings (clave, valor) VALUES (?, ?)');
@@ -224,10 +230,22 @@ router.post('/ajustes', upload.single('logo_imagen'), (req, res) => {
   upsert.run('footer_instagram', footer_instagram || '@vogashoes');
   upsert.run('footer_telefono', footer_telefono || '');
   upsert.run('footer_descripcion', footer_descripcion || 'Tu destino para calzado femenino elegante y moderno. Calidad, estilo y comodidad en cada paso.');
-  upsert.run('cat_icon_flats', cat_icon_flats || 'fas fa-shoe-prints');
-  upsert.run('cat_icon_plataformas', cat_icon_plataformas || 'fas fa-arrow-up');
-  upsert.run('cat_icon_bailarinas', cat_icon_bailarinas || 'fas fa-female');
-  upsert.run('cat_icon_tacones', cat_icon_tacones || 'fas fa-chevron-circle-up');
+
+  var catDefaults = { flats: 'fas fa-shoe-prints', plataformas: 'fas fa-arrow-up', bailarinas: 'fas fa-female', tacones: 'fas fa-chevron-circle-up' };
+  ['flats', 'plataformas', 'bailarinas', 'tacones'].forEach(function(cat) {
+    var clave = 'cat_icon_' + cat;
+    var imgField = 'cat_img_' + cat;
+    var iconVal = req.body[clave] || catDefaults[cat];
+    if (req.files && req.files[imgField] && req.files[imgField][0]) {
+      var prev = db.prepare('SELECT valor FROM site_settings WHERE clave = ?').get(clave);
+      if (prev && prev.valor && prev.valor.indexOf('/') === 0) {
+        var oldPath = path.join(__dirname, '..', 'public', prev.valor);
+        if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+      }
+      iconVal = '/uploads/' + req.files[imgField][0].filename;
+    }
+    upsert.run(clave, iconVal);
+  });
   const admin = db.prepare('SELECT id, username FROM admin WHERE id = ?').get(req.session.adminId);
   const socials = db.prepare('SELECT clave, valor FROM site_settings').all();
   const siteSettings = {};

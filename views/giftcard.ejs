@@ -10,9 +10,9 @@
     <div class="container">
       <div class="giftcard-container">
         <div class="giftcard-card">
-          <div class="giftcard-visual">
+          <div class="giftcard-visual <%= info && info.imagen ? 'giftcard-visual-con-imagen' : '' %>">
             <% if (info && info.imagen) { %>
-              <img src="<%= info.imagen %>" alt="Gift Card" style="width:100%;height:100%;object-fit:cover;">
+              <img src="<%= info.imagen %>" alt="Gift Card">
             <% } else { %>
               <div class="giftcard-front">
                 <div class="giftcard-logo"><%= info && info.visual_logo ? info.visual_logo : 'Voga Shoes' %></div>

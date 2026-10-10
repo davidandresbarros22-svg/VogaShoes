@@ -42,26 +42,27 @@
       <h2 class="section-title">Categorías</h2>
       <p class="section-subtitle">Encuentra tu estilo perfecto</p>
       <div class="categories-grid">
-        <a href="/flats" class="category-card">
-          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_flats ? settings.cat_icon_flats : 'fas fa-shoe-prints' %>"></i></div>
-          <h3>Flats</h3>
-          <p>Comodidad y estilo</p>
-        </a>
-        <a href="/plataformas" class="category-card">
-          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_plataformas ? settings.cat_icon_plataformas : 'fas fa-arrow-up' %>"></i></div>
-          <h3>Plataformas</h3>
-          <p>Altura con confort</p>
-        </a>
-        <a href="/bailarinas" class="category-card">
-          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_bailarinas ? settings.cat_icon_bailarinas : 'fas fa-female' %>"></i></div>
-          <h3>Bailarinas</h3>
-          <p>Clásicas y versátiles</p>
-        </a>
-        <a href="/tacones" class="category-card">
-          <div class="category-icon"><i class="<%= typeof settings !== 'undefined' && settings.cat_icon_tacones ? settings.cat_icon_tacones : 'fas fa-chevron-circle-up' %>"></i></div>
-          <h3>Tacones</h3>
-          <p>Elegancia suprema</p>
-        </a>
+        <% var cats = [
+          { key: 'flats', name: 'Flats', desc: 'Comodidad y estilo', defaultIcon: 'fas fa-shoe-prints' },
+          { key: 'plataformas', name: 'Plataformas', desc: 'Altura con confort', defaultIcon: 'fas fa-arrow-up' },
+          { key: 'bailarinas', name: 'Bailarinas', desc: 'Clásicas y versátiles', defaultIcon: 'fas fa-female' },
+          { key: 'tacones', name: 'Tacones', desc: 'Elegancia suprema', defaultIcon: 'fas fa-chevron-circle-up' }
+        ]; %>
+        <% cats.forEach(function(cat) { %>
+          <% var iconVal = (typeof settings !== 'undefined' && settings['cat_icon_' + cat.key]) ? settings['cat_icon_' + cat.key] : cat.defaultIcon; %>
+          <% var isImg = iconVal.indexOf('/') === 0; %>
+          <a href="/<%= cat.key %>" class="category-card">
+            <div class="category-icon">
+              <% if (isImg) { %>
+                <img src="<%= iconVal %>" alt="<%= cat.name %>" style="width:40px;height:40px;object-fit:cover;border-radius:50%;">
+              <% } else { %>
+                <i class="<%= iconVal %>"></i>
+              <% } %>
+            </div>
+            <h3><%= cat.name %></h3>
+            <p><%= cat.desc %></p>
+          </a>
+        <% }); %>
       </div>
     </div>
   </section>
